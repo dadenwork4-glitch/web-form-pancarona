@@ -14,6 +14,16 @@ export function HeroSection() {
 
       <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center text-center gap-6 md:gap-8">
+          {/* Logo */}
+          <div className="relative w-32 h-32 md:w-40 md:h-40 mb-2">
+            <Image
+              src="/logo-utama.jpeg"
+              alt="Pancarona Logo"
+              fill
+              className="object-contain"
+              priority
+            />
+          </div>
 
 
           {/* Badge */}

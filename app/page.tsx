@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { HeroSection } from '@/components/hero-section'
 import { WhyCollaborateSection } from '@/components/why-collaborate-section'
 import { CreatorBenefitsSection } from '@/components/creator-benefits-section'
@@ -11,10 +12,10 @@ export default function Home() {
       <HeroSection />
 
       {/* Why Collaborate Section */}
-      {/* <WhyCollaborateSection /> */}
+      <WhyCollaborateSection />
 
       {/* Benefits Section */}
-      <CreatorBenefitsSection />
+      {/* <CreatorBenefitsSection /> */}
       
       {/* Expectations Section */}
       {/* <ExpectationsSection /> */}
@@ -49,11 +50,21 @@ export default function Home() {
       <footer className="w-full border-t border-border/30 bg-card/50 backdrop-blur-sm">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-            <div className="text-center md:text-left">
-              <h3 className="font-semibold text-foreground mb-2"> Creator Community</h3>
-              <p className="text-sm text-muted-foreground">
-                Platform untuk  creators dan brand collaborations
-              </p>
+            <div className="flex items-center gap-4 text-center md:text-left">
+              <div className="relative w-12 h-12">
+                <Image
+                  src="/logo-utama.jpeg"
+                  alt="Pancarona Logo"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <div>
+                <h3 className="font-semibold text-foreground mb-1">Pancarona</h3>
+                <p className="text-sm text-muted-foreground">
+                  Platform untuk creators dan brand collaborations
+                </p>
+              </div>
             </div>
             <div className="flex gap-6 text-sm text-muted-foreground">
               <a href="#" className="hover:text-primary transition-colors">Privacy</a>
