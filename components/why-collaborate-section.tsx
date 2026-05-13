@@ -38,12 +38,12 @@ export function WhyCollaborateSection() {
           <div className="absolute bottom-1/4 -left-10 w-64 h-64 bg-white/5 rounded-full blur-[120px] -rotate-12 animate-pulse" style={{ animationDelay: '1s' }}></div>
         </div>
         
-        <div className="relative z-10 w-full max-w-lg">
+        <div className="relative z-10 w-full max-w-2xl">
           <div className="mb-8 md:mb-10 flex h-12 w-12 md:h-16 md:w-16 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl">
             <ArrowRight className="h-6 w-6 md:h-8 md:w-8 text-white" />
           </div>
-          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black text-white leading-[0.9] tracking-tighter uppercase">
-            Why<br /><span className="text-white/70 italic">Collaborate</span><br />With Us?
+          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black text-white leading-[0.9] tracking-tight uppercase">
+            Why<br /><span className="inline-block text-white/70 italic pr-4">Collaborate</span><br />With Us?
           </h2>
         </div>
       </div>
