@@ -160,6 +160,18 @@ export function CreatorForm() {
     }
   }
 
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => {
+        const base64String = (reader.result as string).split(',')[1]
+        resolve(base64String)
+      }
+      reader.onerror = (error) => reject(error)
+    })
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -170,10 +182,43 @@ export function CreatorForm() {
     setIsLoading(true)
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000))
+      // 1. Convert files to Base64
+      const rateCardBase64 = formData.file ? await fileToBase64(formData.file) : ''
+      const commercialBase64 = formData.commercialFile ? await fileToBase64(formData.commercialFile) : ''
+
+      // 2. Prepare payload
+      const payload = {
+        fullName: formData.fullName,
+        nickname: formData.nickname,
+        whatsapp: formData.whatsapp,
+        city: formData.city,
+        instagramUsername: formData.instagramUsername,
+        instagramLink: formData.instagramLink,
+        tiktokUsername: formData.tiktokUsername,
+        tiktokLink: formData.tiktokLink,
+        threadsUsername: formData.threadsUsername,
+        primaryPlatform: formData.primaryPlatform,
+        instagramFollowers: formData.instagramFollowers,
+        tiktokFollowers: formData.tiktokFollowers,
+        contentTypes: formData.contentTypes.join(', '),
+        otherContentType: formData.otherContentType,
+        file: rateCardBase64,
+        fileName: formData.file?.name || 'rate_card.pdf',
+        commercialFile: commercialBase64,
+        commercialFileName: formData.commercialFile?.name || 'commercial_photo.jpg'
+      }
+
+      // 3. Send to Google Apps Script
+      const response = await fetch('https://script.google.com/macros/s/AKfycbxS8TvKK92W2uzOj2dggzR6jawnmLPIm4p6_PP1FHR7lNxD81w1oyhRoQouU08h4XmKYg/exec', {
+        method: 'POST',
+        mode: 'no-cors', // Apps Script does not support CORS for POST, but this will still send the data
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      })
       
-      console.log('Form submitted:', formData)
+      console.log('Form submitted:', payload)
       setShowSuccess(true)
       setFormData({
         fullName: '',
@@ -193,6 +238,9 @@ export function CreatorForm() {
         file: null,
         commercialFile: null,
       })
+    } catch (error) {
+      console.error('Submission error:', error)
+      alert('Terjadi kesalahan saat mengirim data. Silakan coba lagi.')
     } finally {
       setIsLoading(false)
     }
