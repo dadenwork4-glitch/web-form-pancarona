@@ -51,7 +51,7 @@ export default function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="flex items-center gap-4 text-center md:text-left">
-              <div className="relative w-20 h-20">
+              <div className="relative w-28 h-28">
                 <Image
                   src="/logo-utama.jpeg"
                   alt="Pancarona Logo"
