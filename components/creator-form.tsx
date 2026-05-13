@@ -26,6 +26,7 @@ interface FormData {
   tiktokFollowers: string
   threadsUsername: string
   contentTypes: ContentType[]
+  otherContentType: string
   file: File | null
   commercialFile: File | null
 }
@@ -45,6 +46,7 @@ export function CreatorForm() {
     instagramFollowers: '',
     tiktokFollowers: '',
     contentTypes: [],
+    otherContentType: '',
     file: null,
     commercialFile: null,
   })
@@ -74,6 +76,9 @@ export function CreatorForm() {
       newErrors.tiktokFollowers = 'TikTok followers is required'
     }
     if (formData.contentTypes.length === 0) newErrors.contentTypes = 'Select at least one content type'
+    if (formData.contentTypes.includes('other') && !formData.otherContentType.trim()) {
+      newErrors.otherContentType = 'Please specify your other niche'
+    }
     if (!formData.file) newErrors.file = 'Please upload your rate card'
     if (!formData.commercialFile) newErrors.commercialFile = 'Please upload your commercial photo'
 
@@ -184,6 +189,7 @@ export function CreatorForm() {
         instagramFollowers: '',
         tiktokFollowers: '',
         contentTypes: [],
+        otherContentType: '',
         file: null,
         commercialFile: null,
       })
@@ -403,7 +409,7 @@ export function CreatorForm() {
 
         {/* Content Types and Upload */}
         <div className="space-y-6 p-6 rounded-2xl bg-card border border-border/50 backdrop-blur-sm shadow-sm hover:shadow-md transition-shadow">
-          <h3 className="text-lg font-semibold text-foreground">Content & Portfolio</h3>
+          <h3 className="text-lg font-semibold text-foreground">Niche Content</h3>
           
           {/* Content Types */}
           <div className="space-y-4">
@@ -422,6 +428,21 @@ export function CreatorForm() {
               ))}
             </div>
             {errors.contentTypes && <p className="text-xs text-destructive">{errors.contentTypes}</p>}
+            
+            {formData.contentTypes.includes('other') && (
+              <div className="space-y-2 mt-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                <Label htmlFor="otherContentType" className="text-sm font-medium">Sebutkan Niche Lainnya *</Label>
+                <Input
+                  id="otherContentType"
+                  name="otherContentType"
+                  placeholder="E.g., Tech, Food, Finance, etc."
+                  value={formData.otherContentType}
+                  onChange={handleInputChange}
+                  className={`rounded-lg border-border/50 focus:ring-primary focus:border-primary transition-colors ${errors.otherContentType ? 'border-destructive' : ''}`}
+                />
+                {errors.otherContentType && <p className="text-xs text-destructive">{errors.otherContentType}</p>}
+              </div>
+            )}
           </div>
 
           {/* File Upload */}

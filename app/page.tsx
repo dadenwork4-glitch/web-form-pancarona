@@ -17,7 +17,7 @@ export default function Home() {
       <CreatorBenefitsSection />
       
       {/* Expectations Section */}
-      <ExpectationsSection />
+      {/* <ExpectationsSection /> */}
 
       {/* Form Section */}
       <section className="relative w-full py-16 md:py-24 lg:py-32">
@@ -50,9 +50,9 @@ export default function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="text-center md:text-left">
-              <h3 className="font-semibold text-foreground mb-2">Beauty Creator Community</h3>
+              <h3 className="font-semibold text-foreground mb-2"> Creator Community</h3>
               <p className="text-sm text-muted-foreground">
-                Platform untuk beauty creators dan brand collaborations
+                Platform untuk  creators dan brand collaborations
               </p>
             </div>
             <div className="flex gap-6 text-sm text-muted-foreground">
@@ -61,9 +61,42 @@ export default function Home() {
               <a href="#" className="hover:text-primary transition-colors">Contact</a>
             </div>
           </div>
-          <div className="mt-8 pt-8 border-t border-border/30 text-center text-xs text-muted-foreground">
-            <p>&copy; 2024 Beauty Creator Community. All rights reserved.</p>
-          </div>
+          <div className="mt-8 pt-8 border-t border-border/30 text-center text-xs text-muted-foreground space-y-2">
+  <p>
+    Developed by <span className="font-semibold text-foreground"> Deden Julianto</span>
+  </p>
+
+  <div className="flex items-center justify-center gap-4">
+    <a
+      href="https://instagram.com/dadensjulianto"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="hover:text-primary transition-colors"
+    >
+      Instagram
+    </a>
+
+    <a
+      href="https://wa.me/6281211832567"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="hover:text-primary transition-colors"
+    >
+      WhatsApp
+    </a>
+
+    <a
+      href="mailto:dadensjulianto@gmail.com"
+      className="hover:text-primary transition-colors"
+    >
+      Email
+    </a>
+  </div>
+
+  <p className="text-[11px] text-muted-foreground/70">
+    © 2026 Creator Community. All rights reserved.
+  </p>
+</div>
         </div>
       </footer>
     </main>
