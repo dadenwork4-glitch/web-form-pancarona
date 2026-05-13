@@ -4,34 +4,39 @@ export async function POST(request: Request) {
   try {
     const data = await request.json()
     
-    // URL Google Apps Script Anda
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxS8TvKK92W2uzOj2dggzR6jawnmLPIm4p6_PP1FHR7lNxD81w1oyhRoQouU08h4XmKYg/exec'
+    // SheetDB API URL
+    const SHEETDB_API_URL = process.env.SHEETDB_API_URL || 'https://sheetdb.io/api/v1/YOUR_API_ID'
 
-    const response = await fetch(GOOGLE_SCRIPT_URL, {
+    console.log('Sending data to SheetDB:', data)
+
+    const response = await fetch(SHEETDB_API_URL, {
       method: 'POST',
-      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify([data]), // Mengirim sebagai array [ {...} ]
     })
 
-    console.log('Google Script Status:', response.status)
-    const responseText = await response.text()
-    
-    try {
-      const result = JSON.parse(responseText)
-      return NextResponse.json(result)
-    } catch (e) {
-      console.error('Google Response is not JSON. Received:', responseText.substring(0, 500))
-      // If it's HTML, it's likely a login page or error page
-      if (responseText.includes('goog-logo')) {
-        return NextResponse.json({ status: 'error', message: 'Google Script needs "Anyone" access permission.' }, { status: 401 })
-      }
-      return NextResponse.json({ status: 'error', message: 'Invalid response from Google', details: responseText.substring(0, 100) }, { status: 500 })
+    if (!response.ok) {
+      const errorText = await response.text()
+      console.error('SheetDB Error:', errorText)
+      return NextResponse.json({ 
+        status: 'error', 
+        message: 'Failed to save to SheetDB',
+        details: errorText
+      }, { status: response.status })
     }
+
+    const result = await response.json()
+    return NextResponse.json({ status: 'success', result })
+
   } catch (error: any) {
-    console.error('API Proxy Error:', error)
+    console.error('API Error:', error)
     return NextResponse.json({ 
       status: 'error', 
       message: error.message || 'Internal Server Error',
-      details: error.toString()
     }, { status: 500 })
   }
 }
+

@@ -160,16 +160,26 @@ export function CreatorForm() {
     }
   }
 
-  const fileToBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader()
-      reader.readAsDataURL(file)
-      reader.onload = () => {
-        const base64String = (reader.result as string).split(',')[1]
-        resolve(base64String)
-      }
-      reader.onerror = (error) => reject(error)
+  const uploadToCloudinary = async (file: File): Promise<string> => {
+    const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'YOUR_CLOUD_NAME'
+    const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || 'YOUR_UPLOAD_PRESET'
+    
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('upload_preset', uploadPreset)
+
+    const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, {
+      method: 'POST',
+      body: formData,
     })
+
+    if (!response.ok) {
+      const error = await response.json()
+      throw new Error(error.message || 'Failed to upload image')
+    }
+
+    const data = await response.json()
+    return data.secure_url
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -182,11 +192,19 @@ export function CreatorForm() {
     setIsLoading(true)
 
     try {
-      // 1. Convert files to Base64
-      const rateCardBase64 = formData.file ? await fileToBase64(formData.file) : ''
-      const commercialBase64 = formData.commercialFile ? await fileToBase64(formData.commercialFile) : ''
+      // 1. Upload files to Cloudinary
+      let rateCardUrl = ''
+      let commercialPhotoUrl = ''
 
-      // 2. Prepare payload
+      if (formData.file) {
+        rateCardUrl = await uploadToCloudinary(formData.file)
+      }
+
+      if (formData.commercialFile) {
+        commercialPhotoUrl = await uploadToCloudinary(formData.commercialFile)
+      }
+
+      // 2. Prepare payload for SheetDB
       const payload = {
         fullName: formData.fullName,
         nickname: formData.nickname,
@@ -202,10 +220,9 @@ export function CreatorForm() {
         tiktokFollowers: formData.tiktokFollowers,
         contentTypes: formData.contentTypes.join(', '),
         otherContentType: formData.otherContentType,
-        file: rateCardBase64,
-        fileName: formData.file?.name || 'rate_card.pdf',
-        commercialFile: commercialBase64,
-        commercialFileName: formData.commercialFile?.name || 'commercial_photo.jpg'
+        rateCard: rateCardUrl,
+        commercialPhoto: commercialPhotoUrl,
+        submittedAt: new Date().toISOString()
       }
 
       // 3. Send to our internal API Proxy
