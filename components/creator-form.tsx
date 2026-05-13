@@ -208,36 +208,41 @@ export function CreatorForm() {
         commercialFileName: formData.commercialFile?.name || 'commercial_photo.jpg'
       }
 
-      // 3. Send to Google Apps Script
-      const response = await fetch('https://script.google.com/macros/s/AKfycbxS8TvKK92W2uzOj2dggzR6jawnmLPIm4p6_PP1FHR7lNxD81w1oyhRoQouU08h4XmKYg/exec', {
+      // 3. Send to our internal API Proxy
+      const response = await fetch('/api/submit-form', {
         method: 'POST',
-        mode: 'no-cors', // Apps Script does not support CORS for POST, but this will still send the data
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload),
       })
       
-      console.log('Form submitted:', payload)
-      setShowSuccess(true)
-      setFormData({
-        fullName: '',
-        nickname: '',
-        whatsapp: '',
-        city: '',
-        instagramUsername: '',
-        instagramLink: '',
-        tiktokUsername: '',
-        tiktokLink: '',
-        threadsUsername: '',
-        primaryPlatform: 'instagram',
-        instagramFollowers: '',
-        tiktokFollowers: '',
-        contentTypes: [],
-        otherContentType: '',
-        file: null,
-        commercialFile: null,
-      })
+      const result = await response.json()
+      
+      if (result.status === 'success' || response.ok) {
+        console.log('Form submitted successfully')
+        setShowSuccess(true)
+        setFormData({
+          fullName: '',
+          nickname: '',
+          whatsapp: '',
+          city: '',
+          instagramUsername: '',
+          instagramLink: '',
+          tiktokUsername: '',
+          tiktokLink: '',
+          threadsUsername: '',
+          primaryPlatform: 'instagram',
+          instagramFollowers: '',
+          tiktokFollowers: '',
+          contentTypes: [],
+          otherContentType: '',
+          file: null,
+          commercialFile: null,
+        })
+      } else {
+        throw new Error(result.message || 'Submission failed')
+      }
     } catch (error) {
       console.error('Submission error:', error)
       alert('Terjadi kesalahan saat mengirim data. Silakan coba lagi.')
