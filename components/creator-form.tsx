@@ -79,8 +79,8 @@ export function CreatorForm() {
     if (formData.contentTypes.includes('other') && !formData.otherContentType.trim()) {
       newErrors.otherContentType = 'Please specify your other niche'
     }
-    if (!formData.file) newErrors.file = 'Please upload your rate card'
-    if (!formData.commercialFile) newErrors.commercialFile = 'Please upload your commercial photo'
+    // if (!formData.file) newErrors.file = 'Please upload your rate card'
+    // if (!formData.commercialFile) newErrors.commercialFile = 'Please upload your commercial photo'
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
